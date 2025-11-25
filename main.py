@@ -1,15 +1,25 @@
 import sqlite3
-import sys
+import sys, os
 
 from PyQt6.QtWidgets import QApplication, QMainWindow, QHeaderView, QTableWidgetItem
 from main_ui import Ui_MainWindow
 from addEditCoffeeForm_ui import Ui_addEditForm
 
 
+def resource_path(rel_path):
+    if getattr(sys, "frozen", False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, rel_path)
+
+
 class Cappuccino(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        self.con = sqlite3.connect("data/coffee.sqlite")
+        db_file = resource_path("data/coffee.sqlite")
+        self.con = sqlite3.connect(db_file)
         self.cur = self.con.cursor()
         self.initUI()
 
